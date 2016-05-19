@@ -27,6 +27,8 @@
 
 	<h1>Bienvenue dans l'administration du site</h1>
 
+	<a href="index.php" class="btn btn-success"><span class="glyphicon glyphicon-arrow-right"></span> Accueil</a>
+
 	<h3>Ici vous pouvez ajouter un article</h3>
 
 	<br><br>
