@@ -6,6 +6,7 @@
 
 	spl_autoload_register('charger_classes');
 
+	session_start();
 
 	$bdd = new PDO('mysql:host=localhost;dbname=tpnews', 'root', '');
 	$bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
@@ -29,10 +30,19 @@
 	<h3>Ici vous pouvez ajouter un article</h3>
 
 	<br><br>
-	<form>
-		<p><label>Titre* : <input type="text" name="titre" required></label></p>
-		<p><label>Contenu* : <TEXTAREA name="contenu" rows=8 COLS=100></TEXTAREA> </label></p>
-		<p><label>Votre pseudo* : <input type="text" name="auteur" required></label></p>
+	<form method="POST" action="admin_traitement.php?action=publier">
+		<input type="text" name="id" hidden value=<?php if (isset($_SESSION['id'])) {
+			echo '"' . $_SESSION['id'] . '"';
+		} ?>>
+		<p><label>Titre* : <input type="text" name="titre" required value= <?php if (isset($_SESSION['titre'])) {
+			echo '"' . $_SESSION['titre'] . '"';
+		} ?> ></label></p>
+		<p><label>Contenu* : <TEXTAREA name="contenu" rows=8 COLS=100 required> <?php if (isset($_SESSION['contenu'])) {
+			echo $_SESSION['contenu'];
+		} ?></TEXTAREA> </label></p>
+		<p><label>Votre pseudo* : <input type="text" name="auteur" required value=<?php if (isset($_SESSION['auteur'])) {
+			echo '"' . $_SESSION['auteur'] . '"';
+		} ?>></label></p>
 		<p><input type="submit" name="publier" value="publier"></p>
 	</form>
 
@@ -46,7 +56,7 @@
 			<th>Titre</th>
 			<th>Contenu</th>
 			<th>Auteur</th>
-			<th>Créer le</th>
+			<th>Crée le</th>
 			<th>Modifié le</th>
 			<th>Actions</th>
 		</tr>
@@ -60,7 +70,7 @@
 			echo '<td>' . $value->getAuteur() . '</td>';
 			echo '<td>' . $value->getCreated_on() . '</td>';
 			echo '<td>' . $value->getUpdated_on() . '</td>';
-			echo '<td>' . '' . '</td>';
+			echo '<td>' . '<a href="admin_traitement.php?action=modifier&id=' . $value->getId() . '">Modifier</a> / <a href="admin_traitement.php?action=supprimer&id=' . $value->getId() . '">Supprimer</a>' . '</td>';
 			?><tr><?php
 		}
 	?>

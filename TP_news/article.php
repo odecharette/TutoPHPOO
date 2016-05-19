@@ -6,6 +6,7 @@
 
 	spl_autoload_register('charger_classes');
 
+	session_start();
 
 	$bdd = new PDO('mysql:host=localhost;dbname=tpnews', 'root', '');
 	$bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);

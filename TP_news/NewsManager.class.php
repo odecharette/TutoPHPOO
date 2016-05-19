@@ -21,9 +21,9 @@ class NewsManager
 		// ici il faudrait pouvoir hydrater aussi la dateTime de creation qui est automatiquement insérée en BDD
 	}
 
-	public function modifier($news)
+	public function modifier(News $news)
 	{
-		$requete = $this->_bdd->prepare('UPDATE news SET titre=:titre, contenu=:contenu, auteur=:auteur WHERE id=:id');
+		$requete = $this->_bdd->prepare('UPDATE news SET titre=:titre, contenu=:contenu, auteur=:auteur, updated_on=now() WHERE id=:id');
 		$requete->bindValue(':titre', $news->getTitre());
 		$requete->bindValue(':contenu', $news->getContenu());
 		$requete->bindValue(':auteur', $news->getAuteur());
@@ -32,7 +32,7 @@ class NewsManager
 
 	}
 
-	public function supprimer($news)
+	public function supprimer(News $news)
 	{
 		return $this->_bdd->query('DELETE FROM news WHERE id=' . $news->getId());
 
@@ -44,11 +44,11 @@ class NewsManager
 
 		if ((int)$nbNews>0) {
 			// le paramètre est un entier positif, donc on limite le nb de résultat
-			$requete = $this->_bdd->query('SELECT * FROM news ORDER BY created_on DESC LIMIT ' . $nbNews);
+			$requete = $this->_bdd->query('SELECT id, titre, contenu, auteur, DATE_FORMAT(created_on, \'%d/%m/%Y à %h:%i\') AS created_on, DATE_FORMAT(updated_on, \'%d/%m/%Y à %h:%i\') AS updated_on FROM news ORDER BY created_on DESC LIMIT ' . $nbNews);
 		}
 		else{
 			// on affiche tous les article
-			$requete = $this->_bdd->query('SELECT * FROM news ORDER BY created_on DESC');
+			$requete = $this->_bdd->query('SELECT id, titre, contenu, auteur, DATE_FORMAT(created_on, \'%d/%m/%Y à %h:%i\') AS created_on, DATE_FORMAT(updated_on, \'%d/%m/%Y à %h:%i\') AS updated_on FROM news ORDER BY created_on DESC');
 		}
 		
 
